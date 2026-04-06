@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>LTO – User Access Authorization Form | MID 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet"/>
+
+
+<style>:root {
+  --primary: #003087;
+  --accent: #c8102e;
+  --gold: #f5a800;
+  --bg: #f0f2f5;
+  --card: #ffffff;
+  --border: #d0d6e2;
+  --muted: #8a93a8;
+  --text: #1a2236;
+  --disabled-bg: #e8eaf0;
+  --success: #1a7f4b;
+  --shadow: 0 4px 24px rgba(0,48,135,0.10);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Barlow', sans-serif; color: var(--text); }
+body { background: var(--bg); min-height: 100vh; padding: 0 0 60px; }
+
+.site-header { background: var(--primary); color: #fff; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(0,0,0,0.18); }
+.header-inner { max-width: 900px; margin: 0 auto; display: flex; align-items: center; gap: 18px; padding: 14px 24px; }
+.header-titles h1 { font-family: 'Barlow Condensed', sans-serif; font-size: 1.35rem; font-weight: 700; letter-spacing: 0.5px; line-height: 1.1; }
+.header-titles p { font-size: 0.78rem; opacity: 0.75; margin-top: 2px; }
+.lto-badge { margin-left: auto; background: var(--accent); color: #fff; font-family: 'Barlow Condensed', sans-serif; font-size: 0.7rem; font-weight: 700; letter-spacing: 1px; padding: 4px 10px; border-radius: 4px; }
+
+.progress-wrap { background: #fff; border-bottom: 1px solid var(--border); }
+.progress-inner { max-width: 900px; margin: 0 auto; display: flex; }
+.progress-step { flex: 1; display: flex; align-items: center; gap: 10px; padding: 14px 20px; font-size: 0.82rem; font-weight: 600; color: var(--muted); border-bottom: 3px solid transparent; transition: all 0.2s; white-space: nowrap; }
+.progress-step .step-num { width: 26px; height: 26px; border-radius: 50%; background: var(--disabled-bg); color: var(--muted); display: flex; align-items: center; justify-content: center; font-size: 0.78rem; font-weight: 700; flex-shrink: 0; transition: all 0.2s; }
+.progress-step.active { color: var(--primary); border-bottom-color: var(--primary); }
+.progress-step.active .step-num { background: var(--primary); color: #fff; }
+.progress-step.done { color: var(--success); border-bottom-color: var(--success); }
+.progress-step.done .step-num { background: var(--success); color: #fff; }
+
+.main { max-width: 900px; margin: 32px auto; padding: 0 16px; }
+
+.card { background: #fff; border-radius: 12px; box-shadow: var(--shadow); margin-bottom: 24px; overflow: hidden; border: 1px solid var(--border); }
+.card-header { background: var(--primary); color: #fff; padding: 14px 24px; display: flex; align-items: center; gap: 12px; }
+.card-header .sec-num { background: var(--accent); color: #fff; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.78rem; padding: 2px 8px; border-radius: 4px; }
+.card-header h2 { font-family: 'Barlow Condensed', sans-serif; font-size: 1.05rem; font-weight: 700; letter-spacing: 0.5px; }
+.card-body { padding: 24px; }
+
+.form-row { display: flex; gap: 16px; margin-bottom: 18px; flex-wrap: wrap; }
+.form-group { display: flex; flex-direction: column; flex: 1; min-width: 180px; }
+label { font-size: 0.82rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+.req { color: var(--accent); margin-left: 2px; }
+input[type="text"], input[type="email"], input[type="tel"], select, .date-input {
+  border: 1.5px solid var(--border); border-radius: 7px; padding: 11px 14px;
+  font-family: 'Barlow', sans-serif; font-size: 1rem; font-weight: 500; color: var(--text);
+  background: #fff; transition: border-color 0.2s, box-shadow 0.2s; outline: none;
+}
+input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0,48,135,0.08); }
+input.error, select.error { border-color: var(--accent); }
+.field-error { font-size: 0.73rem; color: var(--accent); margin-top: 4px; display: none; }
+.field-error.show { display: block; }
+
+.checkbox-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 8px 16px; margin-bottom: 8px; }
+.checkbox-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; border-radius: 7px; border: 1.5px solid transparent; transition: background 0.15s, border-color 0.15s; cursor: pointer; user-select: none; }
+.checkbox-item:not(.disabled):hover { background: #eef2fb; border-color: var(--border); }
+.checkbox-item.disabled { opacity: 0.45; cursor: not-allowed; background: var(--disabled-bg); border-color: var(--border); }
+.checkbox-item input[type="checkbox"] { margin-top: 2px; accent-color: var(--primary); width: 18px; height: 18px; flex-shrink: 0; cursor: pointer; }
+.checkbox-item.disabled input[type="checkbox"] { cursor: not-allowed; }
+.checkbox-item .cb-label { font-size: 0.95rem; font-weight: 500; line-height: 1.5; color: var(--text); }
+
+
+.module-group { margin-bottom: 20px; }
+.module-group-title { font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.8px; border-left: 3px solid var(--accent); padding-left: 10px; margin-bottom: 10px; }
+
+.access-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 600px) { .access-grid { grid-template-columns: 1fr; } }
+.access-col h4 { font-size: 0.82rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+
+.conditional { display: none; margin-top: 12px; padding: 14px; background: #f4f7fd; border-radius: 8px; border: 1.5px dashed var(--border); animation: fadeIn 0.2s ease; }
+.conditional.show { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+
+.radio-group { display: flex; flex-wrap: wrap; gap: 10px; }
+.radio-item { display: flex; align-items: center; gap: 9px; padding: 10px 16px; border: 1.5px solid var(--border); border-radius: 7px; cursor: pointer; font-size: 0.95rem; font-weight: 500; transition: all 0.15s; user-select: none; }
+.radio-item:hover { border-color: var(--primary); background: #eef2fb; }
+.radio-item input { accent-color: var(--primary); width: 16px; height: 16px; }
+.radio-item.selected { border-color: var(--primary); background: #eef2fb; color: var(--primary); }
+
+.from-to-row { display: flex; gap: 12px; align-items: center; margin-top: 8px; flex-wrap: wrap; }
+.arrow { font-size: 1.2rem; color: var(--muted); flex-shrink: 0; }
+
+.divider { border: none; border-top: 1.5px solid var(--border); margin: 18px 0; }
+
+.btn-submit { display: block; width: 100%; padding: 16px; background: var(--primary); color: #fff; font-family: 'Barlow Condensed', sans-serif; font-size: 1.1rem; font-weight: 700; letter-spacing: 1px; border: none; border-radius: 10px; cursor: pointer; transition: background 0.2s, transform 0.1s; margin-top: 8px; }
+.btn-submit:hover { background: #002070; }
+.btn-submit:active { transform: scale(0.99); }
+.btn-submit:disabled { background: var(--muted); cursor: not-allowed; }
+
+.info-note { background: #eef5ff; border: 1.5px solid #b8d0f5; border-radius: 8px; padding: 12px 16px; font-size: 0.84rem; color: var(--primary); margin-bottom: 20px; display: flex; gap: 10px; align-items: flex-start; }
+.info-note .icon { font-size: 1.1rem; flex-shrink: 0; }
+
+
+
+
+#success-screen { text-align: center; padding: 60px 24px; }
+.success-icon { font-size: 4rem; margin-bottom: 20px; }
+#success-screen h2 { font-family: 'Barlow Condensed', sans-serif; font-size: 2rem; color: var(--success); margin-bottom: 10px; }
+#success-screen p { color: var(--muted); font-size: 1rem; max-width: 420px; margin: 0 auto; line-height: 1.6; }
+.tracking-id { display: inline-block; margin-top: 20px; background: #f0f2f5; border: 1.5px solid var(--border); border-radius: 8px; padding: 10px 24px; font-size: 1.1rem; font-weight: 700; color: var(--primary); letter-spacing: 1px; }
+
+.loading-overlay { display: none; position: fixed; inset: 0; background: rgba(0,48,135,0.18); z-index: 999; align-items: center; justify-content: center; flex-direction: column; gap: 16px; }
+.loading-overlay.show { display: flex; }
+.spinner { width: 48px; height: 48px; border: 5px solid #fff; border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-overlay p { color: #fff; font-weight: 600; font-size: 1rem; }
+
+@media (max-width: 600px) {
+  .header-inner { padding: 12px 14px; }
+  .card-body { padding: 16px; }
+  .progress-step { padding: 10px 10px; font-size: 0.72rem; }
+  .main { padding: 0 8px; margin: 16px auto; }
+}
+</style>
+
+
+
+
+<style>
+
+</style>
+
+<script>
+
+</script>
+
+<style>
+.chief-badge {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 600;
+  background: #fff7ed;
+  color: #92400e;
+  border: 1px solid #fcd34d;
+  padding: 1px 6px;
+  border-radius: 3px;
+  margin-left: 5px;
+  vertical-align: middle;
+  letter-spacing: 0.2px;
+}
+</style>
+
+<style>
+/* Office Code - styled to match form theme */
+.oc-styled-input {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 7px;
+  font-family: 'Barlow', sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text);
+  background: #fff;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+.oc-styled-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(0,48,135,0.08);
+}
+.oc-styled-input:hover {
+  border-color: var(--primary);
+}
+.oc-styled-input.error {
+  border-color: var(--accent);
+}
+/* Style the datalist dropdown options */
+.oc-styled-input::-webkit-calendar-picker-indicator {
+  opacity: 0.5;
+  cursor: pointer;
+}
+option {
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.95rem;
+  padding: 8px 12px;
+  color: var(--text);
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-titles">
+      <h1>LTO Management System</h1>
+      <p>User Access Authorization Form &mdash; MID 2026</p>
+    </div>
+    <div class="lto-badge">MID 2026</div>
+  </div>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-inner">
+    <div class="progress-step active" id="step-ind-1"><div class="step-num">1</div> System Access</div>
+    <div class="progress-step" id="step-ind-2"><div class="step-num">2</div> User Info</div>
+    <div class="progress-step" id="step-ind-3"><div class="step-num">3</div> Modules</div>
+    <div class="progress-step" id="step-ind-4"><div class="step-num">4</div> Submit</div>
+  </div>
+</div>
+
+<div class="loading-overlay" id="loading">
+  <div class="spinner"></div>
+  <p>Submitting your request…</p>
+</div>
+
+<div class="main">
+
+  <div id="success-screen" style="display:none;">
+    <div class="success-icon">✅</div>
+    <h2>Request Submitted!</h2>
+    <p>Your User Access Authorization request has been submitted. Your Chief of Office will review it shortly.</p>
+    <div class="tracking-id" id="tracking-display"></div>
+    <p style="margin-top:16px;font-size:0.85rem;">You will be notified via email once fully approved.</p>
+  </div>
+
+  <form id="uaa-form" novalidate>
+
+    <!-- HEADER FIELDS -->
+    <div class="card">
+      <div class="card-body" style="padding:20px 24px;">
+        <div class="form-row" style="margin-bottom:0;">
+          <div class="form-group">
+            <label>LTO-MID Control No. <span class="req">*</span></label>
+            <input type="text" id="control-no" placeholder="e.g. MID-2026-0001">
+            <div class="field-error" id="control-no-error">Control number is required.</div>
+          </div>
+          <div class="form-group">
+            <label>Effective Date <span class="req">*</span></label>
+            <input type="date" id="effective-date" value="2026-02-26" class="date-input">
+            <div class="field-error" id="effective-date-error">Effective date is required.</div>
+          </div>
+          <div class="form-group">
+            <label>Office Code <span class="req">*</span></label>
+            <div style="position:relative;flex:1;min-width:180px;">
+              <input type="text" id="office-code-input" list="office-code-list"
+                placeholder="Type or click to search office code..."
+                oninput="onOcInput(this)"
+                autocomplete="off"
+                style="width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:7px;font-family:'Barlow',sans-serif;font-size:1rem;font-weight:500;color:var(--text);background:#fff;outline:none;transition:border-color .2s,box-shadow .2s;box-sizing:border-box;"
+                onfocus="this.style.borderColor='var(--primary)';this.style.boxShadow='0 0 0 3px rgba(0,48,135,0.08)'"
+                onblur="this.style.borderColor='var(--border)';this.style.boxShadow='none';onOcBlur(this)">
+              <datalist id="office-code-list">
+                <option value="CO">Central Office — CO</option>
+                <option value="1300">NCR — 1300</option>
+                <option value="1301">NCR — 1301</option>
+                <option value="1302">NCR — 1302</option>
+                <option value="1303">NCR — 1303</option>
+                <option value="1304">NCR — 1304</option>
+                <option value="1305">NCR — 1305</option>
+                <option value="1306">NCR — 1306</option>
+                <option value="1308">NCR — 1308</option>
+                <option value="1309">NCR — 1309</option>
+                <option value="1311">NCR — 1311</option>
+                <option value="1312">NCR — 1312</option>
+                <option value="1315">NCR — 1315</option>
+                <option value="1316">NCR — 1316</option>
+                <option value="1320">NCR — 1320</option>
+                <option value="1322">NCR — 1322</option>
+                <option value="1324">NCR — 1324</option>
+                <option value="1325">NCR — 1325</option>
+                <option value="1327">NCR — 1327</option>
+                <option value="1328">NCR — 1328</option>
+                <option value="1329">NCR — 1329</option>
+                <option value="1330">NCR — 1330</option>
+                <option value="1331">NCR — 1331</option>
+                <option value="1332">NCR — 1332</option>
+                <option value="1336">NCR — 1336</option>
+                <option value="1337">NCR — 1337</option>
+                <option value="1338">NCR — 1338</option>
+                <option value="1340">NCR — 1340</option>
+                <option value="1344">NCR — 1344</option>
+                <option value="1345">NCR — 1345</option>
+                <option value="1346">NCR — 1346</option>
+                <option value="1348">NCR — 1348</option>
+                <option value="1352">NCR — 1352</option>
+                <option value="1354">NCR — 1354</option>
+                <option value="1356">NCR — 1356</option>
+                <option value="1357">NCR — 1357</option>
+                <option value="1358">NCR — 1358</option>
+                <option value="1359">NCR — 1359</option>
+                <option value="1360">NCR — 1360</option>
+                <option value="1361">NCR — 1361</option>
+                <option value="1362">NCR — 1362</option>
+                <option value="1363">NCR — 1363</option>
+                <option value="1364">NCR — 1364</option>
+                <option value="1365">NCR — 1365</option>
+                <option value="1366">NCR — 1366</option>
+                <option value="1367">NCR — 1367</option>
+                <option value="1368">NCR — 1368</option>
+                <option value="1369">NCR — 1369</option>
+                <option value="1372">NCR — 1372</option>
+                <option value="1374">NCR — 1374</option>
+                <option value="1376">NCR — 1376</option>
+                <option value="1377">NCR — 1377</option>
+                <option value="1378">NCR — 1378</option>
+                <option value="1379">NCR — 1379</option>
+                <option value="1380">NCR — 1380</option>
+                <option value="1383">NCR — 1383</option>
+                <option value="1384">NCR — 1384</option>
+                <option value="1385">NCR — 1385</option>
+                <option value="1386">NCR — 1386</option>
+                <option value="1388">NCR — 1388</option>
+                <option value="1390">NCR — 1390</option>
+                <option value="1391">NCR — 1391</option>
+                <option value="1392">NCR — 1392</option>
+                <option value="1393">NCR — 1393</option>
+                <option value="1395">NCR — 1395</option>
+                <option value="1396">NCR — 1396</option>
+                <option value="1397">NCR — 1397</option>
+                <option value="1803">NCR — 1803</option>
+                <option value="1804">NCR — 1804</option>
+                <option value="1805">NCR — 1805</option>
+                <option value="1807">NCR — 1807</option>
+                <option value="9000">NCR — 9000</option>
+                <option value="9020">NCR — 9020</option>
+                <option value="9024">NCR — 9024</option>
+                <option value="0100">Region I — 0100</option>
+                <option value="0101">Region I — 0101</option>
+                <option value="0104">Region I — 0104</option>
+                <option value="0108">Region I — 0108</option>
+                <option value="0110">Region I — 0110</option>
+                <option value="0112">Region I — 0112</option>
+                <option value="0116">Region I — 0116</option>
+                <option value="0120">Region I — 0120</option>
+                <option value="0122">Region I — 0122</option>
+                <option value="0123">Region I — 0123</option>
+                <option value="0124">Region I — 0124</option>
+                <option value="0128">Region I — 0128</option>
+                <option value="0130">Region I — 0130</option>
+                <option value="0132">Region I — 0132</option>
+                <option value="0134">Region I — 0134</option>
+                <option value="0136">Region I — 0136</option>
+                <option value="0138">Region I — 0138</option>
+                <option value="0140">Region I — 0140</option>
+                <option value="0142">Region I — 0142</option>
+                <option value="0143">Region I — 0143</option>
+                <option value="0144">Region I — 0144</option>
+                <option value="0146">Region I — 0146</option>
+                <option value="0200">Region II — 0200</option>
+                <option value="0201">Region II — 0201</option>
+                <option value="0204">Region II — 0204</option>
+                <option value="0210">Region II — 0210</option>
+                <option value="0212">Region II — 0212</option>
+                <option value="0216">Region II — 0216</option>
+                <option value="0218">Region II — 0218</option>
+                <option value="0220">Region II — 0220</option>
+                <option value="0224">Region II — 0224</option>
+                <option value="0226">Region II — 0226</option>
+                <option value="0227">Region II — 0227</option>
+                <option value="0228">Region II — 0228</option>
+                <option value="0231">Region II — 0231</option>
+                <option value="0232">Region II — 0232</option>
+                <option value="0236">Region II — 0236</option>
+                <option value="0240">Region II — 0240</option>
+                <option value="0242">Region II — 0242</option>
+                <option value="0244">Region II — 0244</option>
+                <option value="0248">Region II — 0248</option>
+                <option value="0300">Region III — 0300</option>
+                <option value="0301">Region III — 0301</option>
+                <option value="0304">Region III — 0304</option>
+                <option value="0306">Region III — 0306</option>
+                <option value="0308">Region III — 0308</option>
+                <option value="0309">Region III — 0309</option>
+                <option value="0310">Region III — 0310</option>
+                <option value="0312">Region III — 0312</option>
+                <option value="0316">Region III — 0316</option>
+                <option value="0317">Region III — 0317</option>
+                <option value="0320">Region III — 0320</option>
+                <option value="0324">Region III — 0324</option>
+                <option value="0328">Region III — 0328</option>
+                <option value="0329">Region III — 0329</option>
+                <option value="0332">Region III — 0332</option>
+                <option value="0336">Region III — 0336</option>
+                <option value="0340">Region III — 0340</option>
+                <option value="0344">Region III — 0344</option>
+                <option value="0348">Region III — 0348</option>
+                <option value="0352">Region III — 0352</option>
+                <option value="0353">Region III — 0353</option>
+                <option value="0354">Region III — 0354</option>
+                <option value="0355">Region III — 0355</option>
+                <option value="0356">Region III — 0356</option>
+                <option value="0357">Region III — 0357</option>
+                <option value="0359">Region III — 0359</option>
+                <option value="0360">Region III — 0360</option>
+                <option value="0361">Region III — 0361</option>
+                <option value="0364">Region III — 0364</option>
+                <option value="0366">Region III — 0366</option>
+                <option value="0368">Region III — 0368</option>
+                <option value="0369">Region III — 0369</option>
+                <option value="0370">Region III — 0370</option>
+                <option value="0372">Region III — 0372</option>
+                <option value="0376">Region III — 0376</option>
+                <option value="0377">Region III — 0377</option>
+                <option value="0380">Region III — 0380</option>
+                <option value="0381">Region III — 0381</option>
+                <option value="0382">Region III — 0382</option>
+                <option value="0383">Region III — 0383</option>
+                <option value="0384">Region III — 0384</option>
+                <option value="0385">Region III — 0385</option>
+                <option value="0386">Region III — 0386</option>
+                <option value="0387">Region III — 0387</option>
+                <option value="0388">Region III — 0388</option>
+                <option value="0389">Region III — 0389</option>
+                <option value="0392">Region III — 0392</option>
+                <option value="0398">Region III — 0398</option>
+                <option value="0399">Region III — 0399</option>
+                <option value="0400">Region IV-A — 0400</option>
+                <option value="0401">Region IV-A — 0401</option>
+                <option value="0404">Region IV-A — 0404</option>
+                <option value="0406">Region IV-A — 0406</option>
+                <option value="0408">Region IV-A — 0408</option>
+                <option value="0411">Region IV-A — 0411</option>
+                <option value="0412">Region IV-A — 0412</option>
+                <option value="0413">Region IV-A — 0413</option>
+                <option value="0414">Region IV-A — 0414</option>
+                <option value="0415">Region IV-A — 0415</option>
+                <option value="0417">Region IV-A — 0417</option>
+                <option value="0418">Region IV-A — 0418</option>
+                <option value="0419">Region IV-A — 0419</option>
+                <option value="0420">Region IV-A — 0420</option>
+                <option value="0421">Region IV-A — 0421</option>
+                <option value="0422">Region IV-A — 0422</option>
+                <option value="0423">Region IV-A — 0423</option>
+                <option value="0425">Region IV-A — 0425</option>
+                <option value="0426">Region IV-A — 0426</option>
+                <option value="0428">Region IV-A — 0428</option>
+                <option value="0429">Region IV-A — 0429</option>
+                <option value="0430">Region IV-A — 0430</option>
+                <option value="0431">Region IV-A — 0431</option>
+                <option value="0432">Region IV-A — 0432</option>
+                <option value="0435">Region IV-A — 0435</option>
+                <option value="0436">Region IV-A — 0436</option>
+                <option value="0438">Region IV-A — 0438</option>
+                <option value="0440">Region IV-A — 0440</option>
+                <option value="0441">Region IV-A — 0441</option>
+                <option value="0442">Region IV-A — 0442</option>
+                <option value="0443">Region IV-A — 0443</option>
+                <option value="0444">Region IV-A — 0444</option>
+                <option value="0446">Region IV-A — 0446</option>
+                <option value="0448">Region IV-A — 0448</option>
+                <option value="0452">Region IV-A — 0452</option>
+                <option value="0453">Region IV-A — 0453</option>
+                <option value="0454">Region IV-A — 0454</option>
+                <option value="0457">Region IV-A — 0457</option>
+                <option value="0464">Region IV-A — 0464</option>
+                <option value="0471">Region IV-A — 0471</option>
+                <option value="0472">Region IV-A — 0472</option>
+                <option value="0476">Region IV-A — 0476</option>
+                <option value="0477">Region IV-A — 0477</option>
+                <option value="0478">Region IV-A — 0478</option>
+                <option value="0479">Region IV-A — 0479</option>
+                <option value="0480">Region IV-A — 0480</option>
+                <option value="0482">Region IV-A — 0482</option>
+                <option value="0484">Region IV-A — 0484</option>
+                <option value="0487">Region IV-A — 0487</option>
+                <option value="0488">Region IV-A — 0488</option>
+                <option value="0489">Region IV-A — 0489</option>
+                <option value="0490">Region IV-A — 0490</option>
+                <option value="0491">Region IV-A — 0491</option>
+                <option value="0492">Region IV-A — 0492</option>
+                <option value="0493">Region IV-A — 0493</option>
+                <option value="0498">Region IV-A — 0498</option>
+                <option value="0499">Region IV-A — 0499</option>
+                <option value="9004">Region IV-A — 9004</option>
+                <option value="9043">Region IV-A — 9043</option>
+                <option value="0403">Region IV-B — 0403</option>
+                <option value="0416">Region IV-B — 0416</option>
+                <option value="0424">Region IV-B — 0424</option>
+                <option value="0434">Region IV-B — 0434</option>
+                <option value="0445">Region IV-B — 0445</option>
+                <option value="0456">Region IV-B — 0456</option>
+                <option value="0458">Region IV-B — 0458</option>
+                <option value="0460">Region IV-B — 0460</option>
+                <option value="0461">Region IV-B — 0461</option>
+                <option value="0462">Region IV-B — 0462</option>
+                <option value="0463">Region IV-B — 0463</option>
+                <option value="0465">Region IV-B — 0465</option>
+                <option value="0466">Region IV-B — 0466</option>
+                <option value="0468">Region IV-B — 0468</option>
+                <option value="0469">Region IV-B — 0469</option>
+                <option value="0470">Region IV-B — 0470</option>
+                <option value="0501">Region V — 0501</option>
+                <option value="0504">Region V — 0504</option>
+                <option value="0508">Region V — 0508</option>
+                <option value="0512">Region V — 0512</option>
+                <option value="0516">Region V — 0516</option>
+                <option value="0518">Region V — 0518</option>
+                <option value="0524">Region V — 0524</option>
+                <option value="0527">Region V — 0527</option>
+                <option value="0528">Region V — 0528</option>
+                <option value="0530">Region V — 0530</option>
+                <option value="0531">Region V — 0531</option>
+                <option value="0532">Region V — 0532</option>
+                <option value="0534">Region V — 0534</option>
+                <option value="0536">Region V — 0536</option>
+                <option value="0537">Region V — 0537</option>
+                <option value="0540">Region V — 0540</option>
+                <option value="0541">Region V — 0541</option>
+                <option value="0544">Region V — 0544</option>
+                <option value="0592">Region V — 0592</option>
+                <option value="9005">Region V — 9005</option>
+                <option value="0600">Region VI — 0600</option>
+                <option value="0601">Region VI — 0601</option>
+                <option value="0604">Region VI — 0604</option>
+                <option value="0605">Region VI — 0605</option>
+                <option value="0606">Region VI — 0606</option>
+                <option value="0608">Region VI — 0608</option>
+                <option value="0610">Region VI — 0610</option>
+                <option value="0612">Region VI — 0612</option>
+                <option value="0616">Region VI — 0616</option>
+                <option value="0617">Region VI — 0617</option>
+                <option value="0618">Region VI — 0618</option>
+                <option value="0619">Region VI — 0619</option>
+                <option value="0620">Region VI — 0620</option>
+                <option value="0621">Region VI — 0621</option>
+                <option value="0623">Region VI — 0623</option>
+                <option value="0624">Region VI — 0624</option>
+                <option value="0625">Region VI — 0625</option>
+                <option value="0626">Region VI — 0626</option>
+                <option value="0627">Region VI — 0627</option>
+                <option value="0628">Region VI — 0628</option>
+                <option value="0629">Region VI — 0629</option>
+                <option value="0630">Region VI — 0630</option>
+                <option value="0631">Region VI — 0631</option>
+                <option value="0632">Region VI — 0632</option>
+                <option value="0634">Region VI — 0634</option>
+                <option value="0635">Region VI — 0635</option>
+                <option value="0636">Region VI — 0636</option>
+                <option value="0640">Region VI — 0640</option>
+                <option value="0643">Region VI — 0643</option>
+                <option value="0644">Region VI — 0644</option>
+                <option value="0650">Region VI — 0650</option>
+                <option value="0700">Region VII — 0700</option>
+                <option value="0701">Region VII — 0701</option>
+                <option value="0702">Region VII — 0702</option>
+                <option value="0703">Region VII — 0703</option>
+                <option value="0704">Region VII — 0704</option>
+                <option value="0705">Region VII — 0705</option>
+                <option value="0706">Region VII — 0706</option>
+                <option value="0711">Region VII — 0711</option>
+                <option value="0712">Region VII — 0712</option>
+                <option value="0713">Region VII — 0713</option>
+                <option value="0714">Region VII — 0714</option>
+                <option value="0716">Region VII — 0716</option>
+                <option value="0717">Region VII — 0717</option>
+                <option value="0719">Region VII — 0719</option>
+                <option value="0720">Region VII — 0720</option>
+                <option value="0721">Region VII — 0721</option>
+                <option value="0722">Region VII — 0722</option>
+                <option value="0724">Region VII — 0724</option>
+                <option value="0727">Region VII — 0727</option>
+                <option value="0728">Region VII — 0728</option>
+                <option value="0730">Region VII — 0730</option>
+                <option value="0732">Region VII — 0732</option>
+                <option value="0734">Region VII — 0734</option>
+                <option value="0736">Region VII — 0736</option>
+                <option value="0738">Region VII — 0738</option>
+                <option value="0739">Region VII — 0739</option>
+                <option value="0741">Region VII — 0741</option>
+                <option value="0742">Region VII — 0742</option>
+                <option value="0743">Region VII — 0743</option>
+                <option value="0744">Region VII — 0744</option>
+                <option value="0748">Region VII — 0748</option>
+                <option value="0749">Region VII — 0749</option>
+                <option value="0751">Region VII — 0751</option>
+                <option value="0752">Region VII — 0752</option>
+                <option value="0753">Region VII — 0753</option>
+                <option value="0754">Region VII — 0754</option>
+                <option value="0760">Region VII — 0760</option>
+                <option value="0761">Region VII — 0761</option>
+                <option value="0762">Region VII — 0762</option>
+                <option value="9007">Region VII — 9007</option>
+                <option value="0800">Region VIII — 0800</option>
+                <option value="0801">Region VIII — 0801</option>
+                <option value="0802">Region VIII — 0802</option>
+                <option value="0804">Region VIII — 0804</option>
+                <option value="0808">Region VIII — 0808</option>
+                <option value="0812">Region VIII — 0812</option>
+                <option value="0816">Region VIII — 0816</option>
+                <option value="0820">Region VIII — 0820</option>
+                <option value="0822">Region VIII — 0822</option>
+                <option value="0824">Region VIII — 0824</option>
+                <option value="0826">Region VIII — 0826</option>
+                <option value="0827">Region VIII — 0827</option>
+                <option value="0828">Region VIII — 0828</option>
+                <option value="0831">Region VIII — 0831</option>
+                <option value="0832">Region VIII — 0832</option>
+                <option value="0835">Region VIII — 0835</option>
+                <option value="0836">Region VIII — 0836</option>
+                <option value="0840">Region VIII — 0840</option>
+                <option value="0841">Region VIII — 0841</option>
+                <option value="0844">Region VIII — 0844</option>
+                <option value="0846">Region VIII — 0846</option>
+                <option value="0848">Region VIII — 0848</option>
+                <option value="0900">Region IX — 0900</option>
+                <option value="0901">Region IX — 0901</option>
+                <option value="0904">Region IX — 0904</option>
+                <option value="0907">Region IX — 0907</option>
+                <option value="0908">Region IX — 0908</option>
+                <option value="0909">Region IX — 0909</option>
+                <option value="0911">Region IX — 0911</option>
+                <option value="0912">Region IX — 0912</option>
+                <option value="0920">Region IX — 0920</option>
+                <option value="0925">Region IX — 0925</option>
+                <option value="0926">Region IX — 0926</option>
+                <option value="0927">Region IX — 0927</option>
+                <option value="0928">Region IX — 0928</option>
+                <option value="0929">Region IX — 0929</option>
+                <option value="0930">Region IX — 0930</option>
+                <option value="0931">Region IX — 0931</option>
+                <option value="0932">Region IX — 0932</option>
+                <option value="0935">Region IX — 0935</option>
+                <option value="0936">Region IX — 0936</option>
+                <option value="0937">Region IX — 0937</option>
+                <option value="9009">Region IX — 9009</option>
+                <option value="1000">Region X — 1000</option>
+                <option value="1001">Region X — 1001</option>
+                <option value="1007">Region X — 1007</option>
+                <option value="1008">Region X — 1008</option>
+                <option value="1009">Region X — 1009</option>
+                <option value="1012">Region X — 1012</option>
+                <option value="1014">Region X — 1014</option>
+                <option value="1016">Region X — 1016</option>
+                <option value="1017">Region X — 1017</option>
+                <option value="1018">Region X — 1018</option>
+                <option value="1020">Region X — 1020</option>
+                <option value="1021">Region X — 1021</option>
+                <option value="1022">Region X — 1022</option>
+                <option value="1024">Region X — 1024</option>
+                <option value="1028">Region X — 1028</option>
+                <option value="1032">Region X — 1032</option>
+                <option value="1036">Region X — 1036</option>
+                <option value="1038">Region X — 1038</option>
+                <option value="1044">Region X — 1044</option>
+                <option value="1046">Region X — 1046</option>
+                <option value="1048">Region X — 1048</option>
+                <option value="9010">Region X — 9010</option>
+                <option value="1100">Region XI — 1100</option>
+                <option value="1101">Region XI — 1101</option>
+                <option value="1108">Region XI — 1108</option>
+                <option value="1110">Region XI — 1110</option>
+                <option value="1112">Region XI — 1112</option>
+                <option value="1116">Region XI — 1116</option>
+                <option value="1118">Region XI — 1118</option>
+                <option value="1126">Region XI — 1126</option>
+                <option value="1128">Region XI — 1128</option>
+                <option value="1131">Region XI — 1131</option>
+                <option value="1135">Region XI — 1135</option>
+                <option value="1136">Region XI — 1136</option>
+                <option value="1137">Region XI — 1137</option>
+                <option value="1138">Region XI — 1138</option>
+                <option value="1139">Region XI — 1139</option>
+                <option value="9011">Region XI — 9011</option>
+                <option value="9018">Region XI — 9018</option>
+                <option value="1200">Region XII — 1200</option>
+                <option value="1201">Region XII — 1201</option>
+                <option value="1207">Region XII — 1207</option>
+                <option value="1209">Region XII — 1209</option>
+                <option value="1210">Region XII — 1210</option>
+                <option value="1211">Region XII — 1211</option>
+                <option value="1213">Region XII — 1213</option>
+                <option value="1218">Region XII — 1218</option>
+                <option value="1220">Region XII — 1220</option>
+                <option value="1225">Region XII — 1225</option>
+                <option value="1226">Region XII — 1226</option>
+                <option value="1227">Region XII — 1227</option>
+                <option value="1230">Region XII — 1230</option>
+                <option value="1236">Region XII — 1236</option>
+                <option value="1238">Region XII — 1238</option>
+                <option value="1241">Region XII — 1241</option>
+                <option value="1242">Region XII — 1242</option>
+                <option value="1243">Region XII — 1243</option>
+                <option value="1244">Region XII — 1244</option>
+                <option value="1248">Region XII — 1248</option>
+                <option value="9012">Region XII — 9012</option>
+                <option value="1400">CAR — 1400</option>
+                <option value="1401">CAR — 1401</option>
+                <option value="1404">CAR — 1404</option>
+                <option value="1406">CAR — 1406</option>
+                <option value="1408">CAR — 1408</option>
+                <option value="1412">CAR — 1412</option>
+                <option value="1414">CAR — 1414</option>
+                <option value="1416">CAR — 1416</option>
+                <option value="1420">CAR — 1420</option>
+                <option value="1424">CAR — 1424</option>
+                <option value="1426">CAR — 1426</option>
+                <option value="1428">CAR — 1428</option>
+                <option value="1500">CARAGA — 1500</option>
+                <option value="1504">CARAGA — 1504</option>
+                <option value="1506">CARAGA — 1506</option>
+                <option value="1507">CARAGA — 1507</option>
+                <option value="1508">CARAGA — 1508</option>
+                <option value="1510">CARAGA — 1510</option>
+                <option value="1512">CARAGA — 1512</option>
+                <option value="1516">CARAGA — 1516</option>
+                <option value="1520">CARAGA — 1520</option>
+                <option value="1524">CARAGA — 1524</option>
+                <option value="1526">CARAGA — 1526</option>
+              </datalist>
+              <input type="hidden" id="office-code">
+            </div>
+            <div class="field-error" id="office-code-error">Office code is required.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION I -->
+    <div class="card" id="sec1">
+      <div class="card-header">
+        <span class="sec-num">I</span>
+        <h2>System Access Functions</h2>
+      </div>
+      <div class="card-body">
+        <div class="info-note">
+          <span class="icon">ℹ️</span>
+          <span>Select the type of account action and your user type. Fields marked <span style="color:var(--accent)">*</span> are required.</span>
+        </div>
+        <div class="access-grid">
+          <div class="access-col">
+            <h4>Account Action <span style="color:var(--accent)">*</span></h4>
+            <div class="radio-group" id="account-type-group">
+              <label class="radio-item"><input type="radio" name="account_type" value="New Account" onchange="onAccountType(this)"> New Account</label>
+              <label class="radio-item"><input type="radio" name="account_type" value="Existing Account" onchange="onAccountType(this)"> Existing Account</label>
+              <label class="radio-item"><input type="radio" name="account_type" value="Change Office Code" onchange="onAccountType(this)"> Change Office Code</label>
+            </div>
+            <div class="field-error" id="account-type-error">Please select an account action.</div>
+
+            <div class="conditional" id="existing-sub">
+              <h4 style="margin-bottom:10px;font-size:0.82rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">Account Sub-Action</h4>
+              <div class="radio-group" style="flex-direction:column;gap:8px;">
+                <label class="radio-item"><input type="radio" name="existing_sub" value="Add Role" onchange="onExistingSub(this)"> Add Role</label>
+                <label class="radio-item"><input type="radio" name="existing_sub" value="Remove Role" onchange="onExistingSub(this)"> Remove Role</label>
+                <label class="radio-item"><input type="radio" name="existing_sub" value="Reactivate User" onchange="onExistingSub(this)"> Reactivate User</label>
+                <label class="radio-item"><input type="radio" name="existing_sub" value="Deactivate User" onchange="onExistingSub(this)"> Deactivate User</label>
+              </div>
+              <div class="conditional" id="role-from-to">
+                <div class="from-to-row">
+                  <div class="form-group" style="flex:1;min-width:120px;"><label>From</label><input type="text" id="role-from" placeholder="Current role"></div>
+                  <div class="arrow">→</div>
+                  <div class="form-group" style="flex:1;min-width:120px;"><label>To</label><input type="text" id="role-to" placeholder="New role"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="conditional" id="office-code-sub">
+              <div class="from-to-row">
+                <div class="form-group" style="flex:1;min-width:120px;"><label>From <span class="req">*</span></label><input type="text" id="office-from" placeholder="Current office code"></div>
+                <div class="arrow">→</div>
+                <div class="form-group" style="flex:1;min-width:120px;"><label>To <span class="req">*</span></label><input type="text" id="office-to" placeholder="New office code"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="access-col">
+            <h4>User Type <span style="color:var(--accent)">*</span></h4>
+            <div class="radio-group" style="flex-direction:column;gap:8px;" id="user-type-group">
+              <label class="radio-item"><input type="radio" name="user_type" value="LTO Employee"> LTO Employee</label>
+              <label class="radio-item"><input type="radio" name="user_type" value="OGA"> OGA</label>
+              <label class="radio-item"><input type="radio" name="user_type" value="Stakeholder"> Stakeholder</label>
+            </div>
+            <div class="field-error" id="user-type-error">Please select a user type.</div>
+
+            <hr class="divider" style="margin-top:18px;">
+            <h4 style="margin-bottom:10px;">Login Mode Change <span style="font-weight:400;text-transform:none;font-size:0.75rem;">(optional)</span></h4>
+            <div class="radio-group">
+              <label class="radio-item"><input type="radio" name="login_mode" value="Password (W/Letter)"> Password</label>
+              <label class="radio-item"><input type="radio" name="login_mode" value="Fingerprint"> Fingerprint</label>
+              <label class="radio-item"><input type="radio" name="login_mode" value="Facial Recognition"> Facial Recognition</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION II -->
+    <div class="card" id="sec2">
+      <div class="card-header"><span class="sec-num">II</span><h2>User Information</h2></div>
+      <div class="card-body">
+        <div class="form-row">
+          <div class="form-group"><label>Last Name <span class="req">*</span></label><input type="text" id="last-name" placeholder="e.g. Dela Cruz"><div class="field-error" id="last-name-error">Last name is required.</div></div>
+          <div class="form-group"><label>First Name <span class="req">*</span></label><input type="text" id="first-name" placeholder="e.g. Juan"><div class="field-error" id="first-name-error">First name is required.</div></div>
+          <div class="form-group"><label>Middle Name</label><input type="text" id="middle-name" placeholder="e.g. Santos"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Designation <span class="req">*</span></label><input type="text" id="designation" placeholder="e.g. Chief, OIC, Officer"><div class="field-error" id="designation-error">Designation is required.</div></div>
+          <div class="form-group"><label>Employee ID <span class="req">*</span></label><input type="text" id="employee-id" placeholder="e.g. LTO12345"><div class="field-error" id="employee-id-error">Employee ID is required.</div></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Contact No. <span class="req">*</span></label><input type="tel" id="contact-no" placeholder="e.g. 09171234567"><div class="field-error" id="contact-no-error">Contact number is required.</div></div>
+          <div class="form-group"><label>Email Address <span class="req">*</span></label><input type="email" id="email" placeholder="e.g. juan@lto.gov.ph"><div class="field-error" id="email-error">A valid email is required.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION III -->
+    <div class="card" id="sec3">
+      <div class="card-header"><span class="sec-num">III</span><h2>Modules</h2></div>
+      <div class="card-body">
+        
+        <div class="info-note">
+          <span class="icon">⚠️</span>
+          <span>Select at least one module. Items marked require Chief or OIC designation.</span>
+        </div>
+        <div class="field-error" id="modules-error" style="margin-bottom:12px;">Please select at least one module.</div>
+
+        <div class="module-group">
+          <div class="module-group-title">Driver's Licensing System (DLS)</div>
+          <div class="checkbox-grid">
+            <label class="checkbox-item"><input type="checkbox" name="module" value="DLS Access and Examination"><span class="cb-label">DLS Access and Examination</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="module" value="Interface for Clinic Users"><span class="cb-label">Interface for Clinic Users <span class="chief-badge">(Chief/OIC Only)</span></span></label>
+            <label class="checkbox-item"><input type="checkbox" name="module" value="Client Care Officer – Link Client"><span class="cb-label">Client Care Officer – Link Client</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="module" value="Client Care Officer Search DL"><span class="cb-label">Client Care Officer Search DL</span></label>
+          </div>
+        </div>
+
+        <div class="module-group">
+          <div class="module-group-title">Motor Vehicle Inspection & Registration System (MVIRS)</div>
+          <div class="checkbox-grid">
+            <label class="checkbox-item"><input type="checkbox" name="module" value="MV Approving Officer"><span class="cb-label">MV Approving Officer</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="module" value="MV Officer w/o Biometrics"><span class="cb-label">MV Officer w/o Biometrics</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="module" value="MV Releasing Officer"><span class="cb-label">MV Releasing Officer</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="module" value="MV DO Inspector"><span class="cb-label">MV DO Inspector</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="module" value="MV Super Administrator"><span class="cb-label">MV Super Administrator <span class="chief-badge">(Chief/OIC Only)</span></span></label>
+            <label class="checkbox-item"><input type="checkbox" name="module" value="Plate Management Requests (Regional Office)"><span class="cb-label">Plate Management Requests (Regional Office)</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="module" value="Plate Management Requests (Requestor Office)"><span class="cb-label">Plate Management Requests (Requestor Office)</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="module" value="Plate Management Tracking (NRU)"><span class="cb-label">Plate Management Tracking (NRU)</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="module" value="MVIRS Plate Admin Role (NRU)"><span class="cb-label">MVIRS Plate Admin Role (NRU)</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="module" value="MVIRS - Overview"><span class="cb-label">MVIRS - Overview</span></label>
+          </div>
+        </div>
+
+        <div class="module-group">
+          <div class="module-group-title">Law Enforcement & Traffic Adjudication System (LETAS)</div>
+          <div class="checkbox-grid">
+            <label class="checkbox-item"><input type="checkbox" name="module" value="Law Enforcer/Deputized Agent (Handheld)"><span class="cb-label">Law Enforcer / Deputized Agent (Handheld)</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="module" value="Data Control Officer (Apprehension Encoder)"><span class="cb-label">Data Control Officer (Apprehension Encoder)</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="module" value="TAS Hearing Officer"><span class="cb-label">TAS Hearing Officer</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="module" value="TAS Approving Officer/Director"><span class="cb-label">TAS Approving Officer/Director <span class="chief-badge">(Chief/OIC Only)</span></span></label>
+            <label class="checkbox-item"><input type="checkbox" name="module" value="Alarm Internal Account - Requestor"><span class="cb-label">Alarm Internal Account – Requestor</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="module" value="Alarm Internal Account – Approving"><span class="cb-label">Alarm Internal Account – Approving <span class="chief-badge">(Chief/OIC Only)</span></span></label>
+            <label class="checkbox-item"><input type="checkbox" name="module" value="Alarm Internal Account – Tagging/Lifting"><span class="cb-label">Alarm Internal Account – Tagging/Lifting</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="module" value="Custodian and Releasing Section (CRS Officer)"><span class="cb-label">Custodian and Releasing Section (CRS Officer)</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="module" value="Intervention Program"><span class="cb-label">Intervention Program</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="module" value="Lift Suspension – Requestor"><span class="cb-label">Lift Suspension – Requestor</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="module" value="Lift Suspension – Approving"><span class="cb-label">Lift Suspension – Approving</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="module" value="LETAS: View Apprehensions"><span class="cb-label">LETAS: View Apprehensions</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="module" value="Closing/Lifting of Pending Migrated Apprehension/Alarm"><span class="cb-label">Closing/Lifting of Pending Migrated Apprehension/Alarm <span class="chief-badge">(Chief/OIC Only)</span></span></label>
+          </div>
+        </div>
+
+        <div class="module-group">
+          <div class="module-group-title">Inter-Agency Collaboration (OGA)</div>
+          <div class="checkbox-grid">
+            <label class="checkbox-item"><input type="checkbox" name="module" value="OGA Apprehension"><span class="cb-label">Apprehension</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="module" value="OGA Alarm"><span class="cb-label">Alarm</span></label>
+          </div>
+        </div>
+
+        <div class="module-group">
+          <div class="module-group-title">Revenue Collection System (RCS)</div>
+          <div class="checkbox-grid">
+            <label class="checkbox-item"><input type="checkbox" name="module" value="RCS Primary Cashier User"><span class="cb-label">RCS Primary Cashier User</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="module" value="RCS Cashier User"><span class="cb-label">RCS Cashier User</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="module" value="RCS Official Receipt (Office)"><span class="cb-label">RCS Official Receipt (Office)</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="module" value="RCS Official Receipt (Region Office)"><span class="cb-label">RCS Official Receipt (Region Office)</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="module" value="RCS OR Cancellation Requestor"><span class="cb-label">RCS OR Cancellation Requestor <span class="chief-badge">(Chief/OIC Only)</span></span></label>
+            <label class="checkbox-item"><input type="checkbox" name="module" value="RCS Resident Auditor"><span class="cb-label">RCS Resident Auditor</span></label>
+          </div>
+        </div>
+
+        <div class="module-group">
+          <div class="module-group-title">Others</div>
+          <div class="checkbox-grid">
+            <label class="checkbox-item"><input type="checkbox" name="module" value="Frontliner - Client Assistance"><span class="cb-label">Frontliner – Client Assistance</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="module" value="Clients Admin – Client Verification"><span class="cb-label">Clients Admin – Client Verification <span class="chief-badge">(Chief/OIC Only)</span></span></label>
+            <label class="checkbox-item"><input type="checkbox" name="module" value="Clients Admin – Biometrics Enroll"><span class="cb-label">Clients Admin – Biometrics Enroll</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="module" value="Client Care Officer – View Address Only"><span class="cb-label">Client Care Officer – View Address Only</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="module" value="OAAS – View Appointment"><span class="cb-label">OAAS – View Appointment</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="module" value="Stakeholder - RO OD Evaluator"><span class="cb-label">Stakeholder – RO OD Evaluator</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="module" value="Stakeholder – Stakeholder Enrollment Access"><span class="cb-label">Stakeholder – Stakeholder Enrollment Access</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="module" value="Client Care Officer Edit Stakeholder Details"><span class="cb-label">Client Care Officer Edit Stakeholder Details</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="module" value="Client Care Officer Edit Stakeholder Representative Details"><span class="cb-label">Client Care Officer Edit Stakeholder Representative Details</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="module" value="Imported Legacy Motor Vehicle – Regular Only"><span class="cb-label">Imported Legacy Motor Vehicle – (Regular Only)</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="module" value="Client Care Edit Plate from 7 to 6 digits"><span class="cb-label">Client Care Edit Plate from 7 to 6 digits <span class="chief-badge">(Chief/OIC Only)</span></span></label>
+          </div>
+          <div style="margin-top:12px;">
+            <label style="font-size:0.82rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+              <input type="checkbox" id="others-check" onchange="toggleOthersText(this)" style="accent-color:var(--primary);width:18px;height:18px;">
+              Others – Please specify
+            </label>
+            <input type="text" id="others-text" placeholder="Specify other module…" style="display:none;width:100%;max-width:420px;">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUBMIT -->
+    <div class="card">
+      <div class="card-body">
+        <div class="info-note">
+          <span class="icon">📋</span>
+          <span>By submitting, your request will be routed for approval — <strong>Chief of Office → Sir Francisco → Engr. Oliver</strong>. You will be notified via email once fully approved.</span>
+        </div>
+        <button type="submit" class="btn-submit" id="submit-btn">Submit Request for Approval →</button>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+
+
+
+
+
+
+
+<!-- Choices.js for searchable dropdown -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+</style>
+
+
+
+
+
+
+
+
+</body>
+</html>
+<script>
+// ============================================================
+// OFFICE CODE DROPDOWN
+// ============================================================
+
+
+document.addEventListener('click', function(e) {
+  var wrap = document.getElementById('oc-wrap');
+  if (wrap && !wrap.contains(e.target)) ocClose();
+});
+
+
+
+// ============================================================
+// FORM UI LOGIC
+// ============================================================
+function onAccountType(radio) {
+  document.querySelectorAll('input[name="account_type"]').forEach(function(r) {
+    r.closest('.radio-item').classList.remove('selected');
+  });
+  radio.closest('.radio-item').classList.add('selected');
+  var val = radio.value;
+  document.getElementById('existing-sub').classList.toggle('show', val === 'Existing Account');
+  document.getElementById('office-code-sub').classList.toggle('show', val === 'Change Office Code');
+  if (val !== 'Existing Account') {
+    document.getElementById('role-from-to').classList.remove('show');
+    document.querySelectorAll('input[name="existing_sub"]').forEach(function(r) {
+      r.checked = false;
+      r.closest('.radio-item').classList.remove('selected');
+    });
+  }
+  updateProgress();
+}
+
+function onExistingSub(radio) {
+  document.querySelectorAll('input[name="existing_sub"]').forEach(function(r) {
+    r.closest('.radio-item').classList.remove('selected');
+  });
+  radio.closest('.radio-item').classList.add('selected');
+  var show = radio.value === 'Add Role' || radio.value === 'Remove Role';
+  document.getElementById('role-from-to').classList.toggle('show', show);
+}
+
+function toggleOthersText(cb) {
+  var txt = document.getElementById('others-text');
+  txt.style.display = cb.checked ? 'block' : 'none';
+  if (!cb.checked) txt.value = '';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.radio-item').forEach(function(label) {
+    label.addEventListener('click', function() {
+      var input = this.querySelector('input');
+      if (input && input.name) {
+        document.querySelectorAll('input[name="' + input.name + '"]').forEach(function(r) {
+          r.closest('.radio-item').classList.remove('selected');
+        });
+      }
+      this.classList.add('selected');
+    });
+  });
+});
+
+function updateProgress() {
+  var sections = ['sec1','sec2','sec3'].map(function(id){ return document.getElementById(id); });
+  var steps = ['step-ind-1','step-ind-2','step-ind-3','step-ind-4'].map(function(id){ return document.getElementById(id); });
+  var scrollY = window.scrollY + 120;
+  var active = 0;
+  sections.forEach(function(s, i) { if (s && scrollY >= s.offsetTop) active = i; });
+  steps.forEach(function(s, i) {
+    s.classList.remove('active','done');
+    if (i < active) s.classList.add('done');
+    else if (i === active) s.classList.add('active');
+  });
+}
+window.addEventListener('scroll', updateProgress);
+updateProgress();
+
+// ============================================================
+// INPUT FORMATTING
+// ============================================================
+function initFormatting() {
+  var cn = document.getElementById('control-no');
+  if (cn && !cn.dataset.fmt) {
+    cn.dataset.fmt = '1'; cn.setAttribute('maxlength','20');
+    cn.addEventListener('input', function() {
+      var p = this.selectionStart;
+      this.value = this.value.replace(/[^A-Za-z0-9\-]/g,'').toUpperCase();
+      this.setSelectionRange(p,p);
+    });
+  }
+  ['last-name','first-name','middle-name','designation'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el && !el.dataset.fmt) {
+      el.dataset.fmt = '1';
+      el.addEventListener('input', function() { this.value = this.value.replace(/[^A-Za-z\s.,\-']/g,''); });
+      el.addEventListener('blur',  function() { this.value = this.value.replace(/\b\w/g, function(c){return c.toUpperCase();}); });
+    }
+  });
+  var eid = document.getElementById('employee-id');
+  if (eid && !eid.dataset.fmt) {
+    eid.dataset.fmt = '1'; eid.setAttribute('maxlength','15');
+    eid.addEventListener('input', function() {
+      var p = this.selectionStart;
+      this.value = this.value.replace(/[^A-Za-z0-9\-]/g,'').toUpperCase();
+      this.setSelectionRange(p,p);
+    });
+  }
+  var con = document.getElementById('contact-no');
+  if (con && !con.dataset.fmt) {
+    con.dataset.fmt = '1'; con.setAttribute('maxlength','13'); con.setAttribute('placeholder','09XX-XXX-XXXX');
+    con.addEventListener('input', function() {
+      var raw = this.value.replace(/[^0-9]/g,'').slice(0,11);
+      if (raw.length > 7)      this.value = raw.slice(0,4)+'-'+raw.slice(4,7)+'-'+raw.slice(7);
+      else if (raw.length > 4) this.value = raw.slice(0,4)+'-'+raw.slice(4);
+      else this.value = raw;
+    });
+  }
+  var em = document.getElementById('email');
+  if (em && !em.dataset.fmt) {
+    em.dataset.fmt = '1';
+    em.addEventListener('input', function() {
+      var p = this.selectionStart;
+      this.value = this.value.toLowerCase();
+      this.setSelectionRange(p,p);
+    });
+  }
+}
+
+// ============================================================
+// VALIDATION
+// ============================================================
+
+function onOcInput(el) {
+  // Update hidden field when user types/selects
+  document.getElementById('office-code').value = el.value;
+  // Clear error
+  el.style.borderColor = 'var(--primary)';
+  var err = document.getElementById('office-code-error');
+  if (err) err.classList.remove('show');
+}
+function onOcBlur(el) {
+  // Validate — must match a known code
+  document.getElementById('office-code').value = el.value;
+}
+
+function validateForm() {
+  var valid = true;
+  function showError(id, show) { var el=document.getElementById(id); if(el) el.classList.toggle('show', show); }
+  function fieldError(inputId, errId, condition) {
+    var el = document.getElementById(inputId); if(!el) return;
+    var bad = !condition(el.value.trim());
+    el.classList.toggle('error', bad); showError(errId, bad);
+    if(bad) valid = false;
+  }
+
+  // Header fields
+  fieldError('control-no', 'control-no-error', function(v){ return v.length > 0; });
+
+  // Office code validation
+  var ocInput = document.getElementById('office-code-input');
+  var ocBad = !ocInput || !ocInput.value.trim();
+  if (ocInput) ocInput.style.borderColor = ocBad ? 'var(--accent)' : 'var(--border)';
+  showError('office-code-error', ocBad);
+  if (ocBad) valid = false;
+  else document.getElementById('office-code').value = ocInput.value;
+
+  // Effective date
+  var effDate = document.getElementById('effective-date');
+  var badDate = !effDate || !effDate.value;
+  if (effDate) effDate.classList.toggle('error', badDate);
+  showError('effective-date-error', badDate);
+  if (badDate) valid = false;
+
+  // Account type
+  var accountType = document.querySelector('input[name="account_type"]:checked');
+  showError('account-type-error', !accountType);
+  if (!accountType) valid = false;
+
+  // User type
+  var userType = document.querySelector('input[name="user_type"]:checked');
+  showError('user-type-error', !userType);
+  if (!userType) valid = false;
+
+  // User info
+  fieldError('last-name',   'last-name-error',   function(v){ return v.length > 0; });
+  fieldError('first-name',  'first-name-error',  function(v){ return v.length > 0; });
+  fieldError('designation', 'designation-error', function(v){ return v.length > 0; });
+  fieldError('employee-id', 'employee-id-error', function(v){ return v.length > 0; });
+  fieldError('contact-no',  'contact-no-error',  function(v){ return v.length > 0; });
+  fieldError('email',       'email-error',       function(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); });
+
+  // At least one module
+  var anyModule = document.querySelectorAll('input[name="module"]:checked').length > 0
+    || document.getElementById('others-check').checked;
+  showError('modules-error', !anyModule);
+  if (!anyModule) valid = false;
+
+  if (!valid) {
+    var firstErr = document.querySelector('.error, .field-error.show');
+    if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  return valid;
+}
+
+// Form submit (demo)
+document.addEventListener('DOMContentLoaded', function() {
+  var form = document.getElementById('uaa-form');
+  if (form) {
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      if (!validateForm()) return;
+      alert('Demo mode — Firebase not connected yet.\nForm is valid and ready to submit!');
+    });
+  }
+});
+</script>
