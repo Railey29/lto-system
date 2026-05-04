@@ -18,7 +18,7 @@ export function SectionModules({
   onToggleModule,
   onChangeText,
 }: SectionModulesProps) {
-  const showOtherText = selectedModules.includes("Other Access Request");
+  const showOtherText = selectedModules.includes("Others. Please specify");
 
   return (
     <div className="card" id="sec3">
@@ -61,13 +61,13 @@ export function SectionModules({
         ))}
         {showOtherText && (
           <div className="form-group" style={{ marginTop: 12 }}>
-            <label>Other Request Details</label>
+            <label>Please specify the other access or position</label>
             <input
               type="text"
               id="others-text"
               value={othersText}
               onChange={(e) => onChangeText("othersText", e.target.value)}
-              placeholder="Please describe the requested access"
+              placeholder="Please specify the requested access or position"
             />
             {errors.othersText ? (
               <div className="field-error show">{errors.othersText}</div>

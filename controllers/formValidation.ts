@@ -3,10 +3,6 @@ import type { UAAFormData, UAAFormErrors } from "../types/uaa";
 export function validateUAAForm(form: UAAFormData): UAAFormErrors {
   const errors: UAAFormErrors = {};
 
-  if (!form.controlNo.trim()) {
-    errors.controlNo = "Control number is required.";
-  }
-
   if (!form.officeCode.trim()) {
     errors.officeCode = "Office code is required.";
   }
@@ -17,6 +13,26 @@ export function validateUAAForm(form: UAAFormData): UAAFormErrors {
 
   if (!form.accountType.trim()) {
     errors.accountType = "Please select an account action.";
+  }
+
+  if (
+    form.accountType === "Existing Account" &&
+    !form.existingSub.trim()
+  ) {
+    errors.existingSub = "Please select the existing-account change.";
+  }
+
+  if (form.accountType === "Change Office Code") {
+    if (!form.fromOfficeCode.trim()) {
+      errors.fromOfficeCode = "Current office code is required.";
+    }
+    if (!form.toOfficeCode.trim()) {
+      errors.toOfficeCode = "New office code is required.";
+    }
+  }
+
+  if (!form.username.trim()) {
+    errors.username = "Username is required.";
   }
 
   if (!form.userType.trim()) {
@@ -35,16 +51,29 @@ export function validateUAAForm(form: UAAFormData): UAAFormErrors {
     errors.designation = "Designation is required.";
   }
 
-  if (!form.employeeId.trim()) {
+  const employeeIdOptional = form.accountType !== "New Account";
+  if (!employeeIdOptional && !form.employeeId.trim()) {
     errors.employeeId = "Employee ID is required.";
   }
 
-  if (!form.contactNo.trim()) {
+  const contactOptional = form.accountType !== "New Account";
+  if (!contactOptional && !form.contactNo.trim()) {
     errors.contactNo = "Contact number is required.";
   }
 
-  if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+  if (
+    !contactOptional &&
+    (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
+  ) {
     errors.email = "A valid email is required.";
+  }
+
+  if (
+    contactOptional &&
+    form.email.trim() &&
+    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)
+  ) {
+    errors.email = "Enter a valid email, or leave it blank.";
   }
 
   const hasModule =

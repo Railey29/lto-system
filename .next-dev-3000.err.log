@@ -1,0 +1,20 @@
+DB Submit Error: 
+Invalid `prisma.uaa_user_info.findFirst()` invocation:
+
+
+The column `(not available)` does not exist in the current database.
+[browser] ⨯ unhandledRejection: Error: 
+Invalid `prisma.uaa_user_info.findFirst()` invocation:
+
+
+The column `(not available)` does not exist in the current database.
+    at submitUAAForm (controllers/formSubmit.ts:12:11)
+    at async handleSubmit (hooks/useUAAForm.ts:104:22)
+    at async handleSubmitWithStep (app/uaa-form/page.tsx:62:20)
+  10 |   if (!response.ok) {
+  11 |     const err = await response.json();
+> 12 |     throw new Error(err.error || "Submission failed.");
+     |           ^
+  13 |   }
+  14 |
+  15 |   return await response.json();

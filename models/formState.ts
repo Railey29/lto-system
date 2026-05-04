@@ -4,6 +4,7 @@ export const INITIAL_FORM_STATE: UAAFormData = {
   controlNo: "",
   effectiveDate: new Date().toISOString().slice(0, 10),
   officeCode: "",
+  username: "",
   accountType: "",
   existingSub: "",
   fromOfficeCode: "",
@@ -17,6 +18,8 @@ export const INITIAL_FORM_STATE: UAAFormData = {
   employeeId: "",
   contactNo: "",
   email: "",
+  supportingDocumentName: "",
+  supportingDocumentUrl: "",
   selectedModules: [],
   othersText: "",
 };

@@ -7,6 +7,21 @@ datasource db {
   provider = "postgresql"
 }
 
+model admin_accounts {
+  id          Int      @id @default(autoincrement())
+  employee_id String   @unique
+  username    String   @unique
+  password    String
+  first_name  String
+  middle_name String?
+  last_name   String
+  office      String
+  level       Int      @default(1)
+  role        String   @default("Pending Approval")
+  is_active   Boolean  @default(false)
+  created_at  DateTime @default(now()) @db.Timestamptz(6)
+}
+
 model uaa_modules {
   id               Int              @id @default(autoincrement())
   submission_id    Int?
@@ -22,6 +37,11 @@ model uaa_submissions {
   effective_date    String?
   office_code       String?
   submitted_at      DateTime?           @default(now()) @db.Timestamptz(6)
+  status            String?             @default("Pending")
+  approved_by_l1    Boolean?            @default(false)
+  approved_by_l2    Boolean?            @default(false)
+  approved_by_l3    Boolean?            @default(false)
+  approved_by_l4    Boolean?            @default(false)
   uaa_modules       uaa_modules[]
   uaa_system_access uaa_system_access[]
   uaa_user_info     uaa_user_info[]
@@ -40,14 +60,17 @@ model uaa_system_access {
 }
 
 model uaa_user_info {
-  id              Int              @id @default(autoincrement())
-  submission_id   Int?
-  last_name       String?
-  first_name      String?
-  middle_name     String?
-  designation     String?
-  employee_id     String?
-  contact_no      String?
-  email           String?
-  uaa_submissions uaa_submissions? @relation(fields: [submission_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  id                          Int              @id @default(autoincrement())
+  submission_id               Int?
+  last_name                   String?
+  first_name                  String?
+  middle_name                 String?
+  username                    String?
+  designation                 String?
+  employee_id                 String?
+  contact_no                  String?
+  email                       String?
+  supporting_document_name    String?
+  supporting_document_url     String?
+  uaa_submissions             uaa_submissions? @relation(fields: [submission_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }

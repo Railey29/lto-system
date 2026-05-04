@@ -1,7 +1,6 @@
 import type { UAAFormData, UAAFormErrors } from "../../types/uaa";
 
 interface HeaderFieldsProps {
-  controlNo: string;
   effectiveDate: string;
   officeCode: string;
   officeCodeOptions: string[];
@@ -10,7 +9,6 @@ interface HeaderFieldsProps {
 }
 
 export function HeaderFields({
-  controlNo,
   effectiveDate,
   officeCode,
   officeCodeOptions,
@@ -21,21 +19,6 @@ export function HeaderFields({
     <div className="card">
       <div className="card-body" style={{ padding: "20px 24px" }}>
         <div className="form-row" style={{ marginBottom: 0 }}>
-          <div className="form-group">
-            <label>
-              LTO-MID Control No. <span className="req">*</span>
-            </label>
-            <input
-              type="text"
-              id="control-no"
-              value={controlNo}
-              onChange={(e) => onChange("controlNo", e.target.value)}
-              placeholder="e.g. MID-2026-0001"
-            />
-            {errors.controlNo ? (
-              <div className="field-error show">{errors.controlNo}</div>
-            ) : null}
-          </div>
           <div className="form-group">
             <label>
               Effective Date <span className="req">*</span>
@@ -71,6 +54,18 @@ export function HeaderFields({
             {errors.officeCode ? (
               <div className="field-error show">{errors.officeCode}</div>
             ) : null}
+          </div>
+          <div className="form-group">
+            <label>MID Number</label>
+            <input
+              type="text"
+              value="Auto-generated after submission"
+              disabled
+              style={{
+                background: "var(--disabled-bg)",
+                color: "var(--muted)",
+              }}
+            />
           </div>
         </div>
       </div>

@@ -2,6 +2,7 @@ export interface UAAFormData {
   controlNo: string;
   effectiveDate: string;
   officeCode: string;
+  username: string;
   accountType: string;
   existingSub: string;
   fromOfficeCode: string;
@@ -15,6 +16,8 @@ export interface UAAFormData {
   employeeId: string;
   contactNo: string;
   email: string;
+  supportingDocumentName: string;
+  supportingDocumentUrl: string;
   selectedModules: string[];
   othersText: string;
 }
@@ -23,7 +26,11 @@ export interface UAAFormErrors {
   controlNo?: string;
   effectiveDate?: string;
   officeCode?: string;
+  username?: string;
   accountType?: string;
+  existingSub?: string;
+  fromOfficeCode?: string;
+  toOfficeCode?: string;
   userType?: string;
   lastName?: string;
   firstName?: string;

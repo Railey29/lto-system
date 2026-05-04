@@ -30,6 +30,14 @@ export function formatEmail(value: string) {
   return value.toLowerCase();
 }
 
+export function formatUsername(value: string) {
+  return value.replace(/[^A-Za-z0-9._-]/g, "").toLowerCase();
+}
+
+export function generateEmployeeId() {
+  return `LTO${String(Math.floor(10000 + Math.random() * 90000))}`;
+}
+
 export function sanitizeInputValue(event: ChangeEvent<HTMLInputElement>) {
   return event.target.value;
 }

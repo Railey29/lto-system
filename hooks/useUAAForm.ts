@@ -8,6 +8,8 @@ import {
   formatEmployeeId,
   formatNameInput,
   formatEmail,
+  formatUsername,
+  generateEmployeeId,
 } from "../controllers/inputFormatting";
 import { INITIAL_FORM_STATE } from "../models/formState";
 import { MODULE_GROUPS } from "../models/modules";
@@ -33,17 +35,21 @@ export function useUAAForm() {
     if (field === "employeeId") nextValue = formatEmployeeId(value);
     if (field === "contactNo") nextValue = formatContactNo(value);
     if (field === "email") nextValue = formatEmail(value);
+    if (field === "username") nextValue = formatUsername(value);
     setForm((current) => ({ ...current, [field]: nextValue }));
     setErrors((current) => ({ ...current, [field]: undefined }));
   };
 
   const handleAccountTypeChange = (value: string) => {
+    const isNewAccount = value === "New Account";
+
     setForm((current) => ({
       ...current,
       accountType: value,
       existingSub: "",
       fromOfficeCode: "",
       toOfficeCode: "",
+      employeeId: isNewAccount ? generateEmployeeId() : "",
     }));
     setErrors((current) => ({ ...current, accountType: undefined }));
   };
@@ -59,6 +65,14 @@ export function useUAAForm() {
 
   const handleLoginModeChange = (value: string) => {
     setForm((current) => ({ ...current, loginMode: value }));
+  };
+
+  const handleFileChange = (fileName: string, fileUrl: string) => {
+    setForm((current) => ({
+      ...current,
+      supportingDocumentName: fileName,
+      supportingDocumentUrl: fileUrl,
+    }));
   };
 
   const handleFromOfficeCodeChange = (value: string) => {
@@ -110,6 +124,7 @@ export function useUAAForm() {
     handleExistingSubChange,
     handleUserTypeChange,
     handleLoginModeChange,
+    handleFileChange,
     handleFromOfficeCodeChange,
     handleToOfficeCodeChange,
     handleModuleToggle,

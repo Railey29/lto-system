@@ -1,0 +1,8 @@
+⨯ Another next dev server is already running.
+
+- Local:        http://localhost:3001
+- PID:          1988
+- Dir:          C:\Users\jojopc\Desktop\Soco-Client\lto-system
+- Log:          .next\dev\logs\next-development.log
+
+Run taskkill /PID 1988 /F to stop it.

@@ -1,6 +1,8 @@
 import type { UAAFormData, UAAFormErrors } from "../../types/uaa";
 
 interface SectionUserInfoProps {
+  username: string;
+  accountType: string;
   lastName: string;
   firstName: string;
   middleName: string;
@@ -13,6 +15,8 @@ interface SectionUserInfoProps {
 }
 
 export function SectionUserInfo({
+  username,
+  accountType,
   lastName,
   firstName,
   middleName,
@@ -23,6 +27,10 @@ export function SectionUserInfo({
   errors,
   onChange,
 }: SectionUserInfoProps) {
+  const isNewAccount = accountType === "New Account";
+  const employeeIdOptional = !isNewAccount;
+  const contactOptional = accountType !== "New Account";
+
   return (
     <div className="card" id="sec2">
       <div className="card-header">
@@ -30,6 +38,23 @@ export function SectionUserInfo({
         <h2>User Information</h2>
       </div>
       <div className="card-body">
+        <div className="form-row">
+          <div className="form-group">
+            <label>
+              Username <span className="req">*</span>
+            </label>
+            <input
+              type="text"
+              id="username"
+              value={username}
+              onChange={(e) => onChange("username", e.target.value)}
+              placeholder="Existing or requested username"
+            />
+            {errors.username ? (
+              <div className="field-error show">{errors.username}</div>
+            ) : null}
+          </div>
+        </div>
         <div className="form-row">
           <div className="form-group">
             <label>
@@ -90,15 +115,28 @@ export function SectionUserInfo({
           </div>
           <div className="form-group">
             <label>
-              Employee ID <span className="req">*</span>
+              Employee ID{" "}
+              {employeeIdOptional ? (
+                "(Optional)"
+              ) : (
+                <span className="req">*</span>
+              )}
             </label>
             <input
               type="text"
               id="employee-id"
               value={employeeId}
               onChange={(e) => onChange("employeeId", e.target.value)}
-              placeholder="e.g. LTO12345"
+              placeholder={
+                isNewAccount ? "Auto-generated for new users" : "e.g. LTO12345"
+              }
+              readOnly={isNewAccount}
             />
+            {isNewAccount ? (
+              <div className="field-note">
+                Generated automatically for new users.
+              </div>
+            ) : null}
             {errors.employeeId ? (
               <div className="field-error show">{errors.employeeId}</div>
             ) : null}
@@ -107,7 +145,8 @@ export function SectionUserInfo({
         <div className="form-row">
           <div className="form-group">
             <label>
-              Contact No. <span className="req">*</span>
+              Contact No.{" "}
+              {contactOptional ? "(Optional)" : <span className="req">*</span>}
             </label>
             <input
               type="tel"
@@ -122,7 +161,8 @@ export function SectionUserInfo({
           </div>
           <div className="form-group">
             <label>
-              Email Address <span className="req">*</span>
+              Email Address{" "}
+              {contactOptional ? "(Optional)" : <span className="req">*</span>}
             </label>
             <input
               type="email"

@@ -22,7 +22,7 @@ const accountOptions = [
   "Existing Account",
   "Change Office Code",
 ];
-const existingOptions = ["Add Role", "Remove Role", "Update Details"];
+const existingOptions = ["Change Role", "Remove Role", "Update Details"];
 const userTypeOptions = ["LTO Employee", "OGA", "Stakeholder"];
 const loginModeOptions = ["Password", "Fingerprint", "Facial Recognition"];
 
@@ -90,6 +90,9 @@ export function SectionSystemAccess({
                     />
                   ))}
                 </div>
+                {errors.existingSub ? (
+                  <div className="field-error show">{errors.existingSub}</div>
+                ) : null}
               </div>
             )}
 
@@ -129,6 +132,11 @@ export function SectionSystemAccess({
                         fontSize: "0.85rem",
                       }}
                     />
+                    {errors.fromOfficeCode ? (
+                      <div className="field-error show">
+                        {errors.fromOfficeCode}
+                      </div>
+                    ) : null}
                   </div>
                   <span
                     style={{ marginTop: 20, fontWeight: 700, color: "#555" }}
@@ -161,6 +169,11 @@ export function SectionSystemAccess({
                         fontSize: "0.85rem",
                       }}
                     />
+                    {errors.toOfficeCode ? (
+                      <div className="field-error show">
+                        {errors.toOfficeCode}
+                      </div>
+                    ) : null}
                   </div>
                 </div>
               </div>

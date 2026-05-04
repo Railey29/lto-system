@@ -1,5 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { generateUploadButton } from "@uploadthing/react";
+import type { OurFileRouter } from "../../lib/uploadthing";
 import { SiteHeader } from "../../components/ui/SiteHeader";
 import { ProgressBar } from "../../components/ui/ProgressBar";
 import { LoadingOverlay } from "../../components/ui/LoadingOverlay";
@@ -10,6 +12,8 @@ import { SectionUserInfo } from "../../components/form/SectionUserInfo";
 import { SectionModules } from "../../components/form/SectionModules";
 import { SubmitCard } from "../../components/form/SubmitCard";
 import { useUAAForm } from "../../hooks/useUAAForm";
+
+const UploadButton = generateUploadButton<OurFileRouter>();
 
 export default function UAAFormPage() {
   const {
@@ -22,6 +26,7 @@ export default function UAAFormPage() {
     handleExistingSubChange,
     handleUserTypeChange,
     handleLoginModeChange,
+    handleFileChange,
     handleFromOfficeCodeChange,
     handleToOfficeCodeChange,
     handleModuleToggle,
@@ -69,7 +74,6 @@ export default function UAAFormPage() {
       {successId ? <SuccessScreen trackingId={successId} /> : null}
       <form id="uaa-form" className={successId ? "form-hidden" : ""}>
         <HeaderFields
-          controlNo={form.controlNo}
           effectiveDate={form.effectiveDate}
           officeCode={form.officeCode}
           officeCodeOptions={availableOfficeCodes}
@@ -92,6 +96,8 @@ export default function UAAFormPage() {
           onLoginModeChange={handleLoginModeChange}
         />
         <SectionUserInfo
+          username={form.username}
+          accountType={form.accountType}
           lastName={form.lastName}
           firstName={form.firstName}
           middleName={form.middleName}
@@ -110,6 +116,46 @@ export default function UAAFormPage() {
           onToggleModule={handleModuleToggle}
           onChangeText={handleFieldChange}
         />
+        <div className="card">
+          <div className="card-header">
+            <h2>Upload Supporting Document</h2>
+          </div>
+          <div className="card-body">
+            <div className="form-group" style={{ width: "100%" }}>
+              <UploadButton
+                endpoint="doc"
+                onClientUploadComplete={(res) => {
+                  if (!res?.length) return;
+                  const upload = res[0];
+                  handleFileChange(
+                    upload.serverData.fileName,
+                    upload.serverData.fileUrl,
+                  );
+                }}
+                onUploadError={(error) => {
+                  console.error("UploadThing error:", error);
+                }}
+                appearance={{
+                  container: { width: "100%" },
+                  button: {
+                    width: "100%",
+                    backgroundColor: "var(--primary)",
+                    color: "#fff",
+                  },
+                }}
+                content={{
+                  button: "Choose Supporting Document",
+                  allowedContent: "Any file up to 8MB",
+                }}
+              />
+              {form.supportingDocumentName ? (
+                <div className="field-note">
+                  Selected file: {form.supportingDocumentName}
+                </div>
+              ) : null}
+            </div>
+          </div>
+        </div>
         <SubmitCard
           isSubmitting={isSubmitting}
           onSubmit={handleSubmitWithStep}
