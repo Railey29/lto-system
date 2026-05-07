@@ -38,7 +38,7 @@ export function SectionUserInfo({
         <h2>User Information</h2>
       </div>
       <div className="card-body">
-        <div className="form-row">
+        <div className="form-row flex-col sm:flex-row">
           <div className="form-group">
             <label>
               Username <span className="req">*</span>
@@ -55,7 +55,7 @@ export function SectionUserInfo({
             ) : null}
           </div>
         </div>
-        <div className="form-row">
+        <div className="form-row flex-col sm:flex-row">
           <div className="form-group">
             <label>
               Last Name <span className="req">*</span>
@@ -97,7 +97,7 @@ export function SectionUserInfo({
             />
           </div>
         </div>
-        <div className="form-row">
+        <div className="form-row flex-col sm:flex-row">
           <div className="form-group">
             <label>
               Designation <span className="req">*</span>

@@ -55,7 +55,7 @@ export function SectionSystemAccess({
             <span style={{ color: "var(--accent)" }}>*</span> are required.
           </span>
         </div>
-        <div className="access-grid">
+        <div className="access-grid grid grid-cols-1 sm:grid-cols-2">
           <div className="access-col">
             <h4>
               Account Action <span style={{ color: "var(--accent)" }}>*</span>

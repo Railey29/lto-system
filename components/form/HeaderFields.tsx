@@ -18,7 +18,7 @@ export function HeaderFields({
   return (
     <div className="card">
       <div className="card-body" style={{ padding: "20px 24px" }}>
-        <div className="form-row" style={{ marginBottom: 0 }}>
+        <div className="form-row flex-col sm:flex-row" style={{ marginBottom: 0 }}>
           <div className="form-group">
             <label>
               Effective Date <span className="req">*</span>
